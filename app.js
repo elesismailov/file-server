@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const path = require('path');
 
@@ -8,13 +9,32 @@ const app = express();
 const fileStorage = require('./modules/fileStorage');
 
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res, next) => {
 
-  fileStorage.createAdapter()
+  const adapter = fileStorage.createAdapter(__dirname + req.path);
 
-  res.send('hello world!')
+  const parse = path.parse(req.path);
+
+  const filename = parse.name + parse.ext;
+
+  // requested file stream
+  const readStream = adapter.getFile(filename);
+
+  readStream
+    .on('open', () => {
+      
+      readStream.pipe(res)
+
+    })
+    .on('err', () => {
+      // TODO handle error
+    })
+    .on('end', () => {
+      res.end()
+    })
 
 });
+
 
 
 app.get('/get', (req, res) => {
