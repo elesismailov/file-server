@@ -7,7 +7,7 @@ const File = require('../models/file');
 
 const metaStorage = {};
 
-metaStorage.createMetaData = function(filepath) {
+metaStorage.createMetaData = function(filepath, options) {
 
   console.log('creating meta data')
 
@@ -16,6 +16,8 @@ metaStorage.createMetaData = function(filepath) {
   const filename = parsed.name + parsed.ext;
 
   const stat = fs.statSync(filepath);
+
+  const mimeType = options ? options.type : mime.lookup(filepath);
 
   File.findOne({fullPath: filepath}, (err, resFile) => {
     if (err) {
@@ -27,13 +29,15 @@ metaStorage.createMetaData = function(filepath) {
 
       // creating mime data
       const file = new File({
+
         name: filename, 
         dir: parsed.dir,
         fullPath: filepath,
-        type: mime.lookup(filepath),
+        type: mimeType,
         size: stat.size,
         cDate: stat.birthtime,
         mDate: stat.mtime,
+
       });
 
       file.save((err) => {
@@ -47,14 +51,17 @@ metaStorage.createMetaData = function(filepath) {
     } else {
     // update meta data
 
-      File.findByIdAndUpdate({id: resFile.id}, {
-        name: filename, 
-        dir: parsed.dir,
+      File.findOneAndUpdate({fullPath: filepath}, {
+
         fullPath: filepath,
-        type: mime.lookup(filepath),
+        type: mimeType,
         size: stat.size,
-        cDate: stat.birthtime,
-        mDate: stat.mtime,
+
+      }, (err, up) => {
+
+        if (err) throw err
+
+        console.log('updated')
       })
     }
   });

@@ -44,10 +44,11 @@ app.get('/*', async (req, res) => {
 
   if (meta) {
 
+    // TODO some mime types are wrong
     res.append('Content-Type', meta.type)
 
     // the user set content-length messes up response
-    res.append('Content-Length', meta.size-1)
+    meta.size ? res.append('Content-Length', meta.size-1): 0;
     
   }
   // get directory adapter
@@ -103,8 +104,11 @@ app.post('/*', (req, res, next) => {
 
       fileWriteStream.end()
 
-      metaStorage.createMetaData(path.join(__dirname, req.path))
-      console.log()
+      console.log(req.get('Content-Type'))
+
+      metaStorage.createMetaData(path.join(__dirname, req.path), {
+        type: req.get('Content-Type'),
+      });
 
       res.end()
 
