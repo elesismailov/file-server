@@ -6,6 +6,7 @@ const FileSchema = new Schema({
 
   name: {type: String, required: true},
   dir: {type: String, required: true},
+  fullPath: {type: String, required: true, unique: true},
   size: {type: Number, required: true},
   type: {type: String, required: true},
   cDate: {type: Date, required: true},

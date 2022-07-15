@@ -17,25 +17,51 @@ metaStorage.createMetaData = function(filepath) {
 
   const stat = fs.statSync(filepath);
 
-  // creating mime data
-  const file = new File({
-    name: filename, 
-    dir: parsed.dir,
-    type: mime.lookup(filepath),
-    size: stat.size,
-    cDate: stat.birthtime,
-    mDate: stat.mtime,
+  File.findOne({fullPath: filepath}, (err, resFile) => {
+    if (err) {
+      throw err
+    }
+
+    // create new meta data
+    if (resFile == null) {
+
+      // creating mime data
+      const file = new File({
+        name: filename, 
+        dir: parsed.dir,
+        fullPath: filepath,
+        type: mime.lookup(filepath),
+        size: stat.size,
+        cDate: stat.birthtime,
+        mDate: stat.mtime,
+      });
+
+      file.save((err) => {
+        if (err) {
+          // console.log(err)
+          throw err
+        }
+        console.log('created meta data')
+      });
+
+    } else {
+    // update meta data
+
+      File.findByIdAndUpdate({id: resFile.id}, {
+        name: filename, 
+        dir: parsed.dir,
+        fullPath: filepath,
+        type: mime.lookup(filepath),
+        size: stat.size,
+        cDate: stat.birthtime,
+        mDate: stat.mtime,
+      })
+
+    }
+
+
   });
 
-  file.save((err) => {
-    if (err) {
-      // console.log(err)
-      throw err
-      return null
-    }
-    console.log(file)
-    return file
-  });
 
 }
 
