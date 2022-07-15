@@ -9,8 +9,12 @@ function Adapter(dirpath) {
 
 
 Adapter.prototype.getFile = function(filename) {
-  // returns a file stream
-  console.log('get file')
+
+  /**
+  *
+  * Returns file request stream
+  *
+  */
 
   const filepath = path.join(this.path, filename);
 

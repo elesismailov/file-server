@@ -9,8 +9,10 @@ const app = express();
 const fileStorage = require('./modules/fileStorage');
 
 
+// GET File
 app.get('/*', (req, res, next) => {
 
+  // get directory adapter
   const adapter = fileStorage.createAdapter(__dirname + req.path);
 
   const parse = path.parse(req.path);
@@ -75,5 +77,5 @@ const port = 5000;
 
 
 app.listen(port, () => {
-  console.log('ready')
+  console.log('App is listening...')
 });
