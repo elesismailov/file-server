@@ -56,17 +56,19 @@ metaStorage.createMetaData = function(filepath) {
         cDate: stat.birthtime,
         mDate: stat.mtime,
       })
-
     }
-
-
   });
-
-
 }
 
-metaStorage.getMetaData = function(filepath) {
+metaStorage.getMetaData = async function(filepath) {
 
+  const file = await File.findOne({fullPath: filepath});
+
+  console.log(filepath)
+
+  // TODO error handling
+
+  return file
 
 }
 

@@ -12,8 +12,24 @@ const initializeMongo = require('./mongoConfig');
 
 initializeMongo()
 
+
+app.get('/info/*', async (req, res) => {
+
+  const parsed = path.parse(req.path);
+
+  const filepath = req.path.slice(5);
+  
+  const meta = await metaStorage.getMetaData(path.join(__dirname, filepath));
+
+  console.log(meta)
+
+  res.json(meta)
+
+});
+
+
 // GET File
-app.get('/*', (req, res, next) => {
+app.get('/*', (req, res) => {
 
   if (req.path == '/') {
     
