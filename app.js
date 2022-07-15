@@ -29,7 +29,7 @@ app.get('/info/*', async (req, res) => {
 
 
 // GET File
-app.get('/*', (req, res) => {
+app.get('/*', async (req, res) => {
 
   if (req.path == '/') {
     
@@ -37,8 +37,21 @@ app.get('/*', (req, res) => {
     return 
   }
 
+  const filepath = path.join(__dirname + req.path);
+
+  // TODO handle null meta data
+  const meta = await metaStorage.getMetaData(filepath);
+
+  if (meta) {
+
+    res.append('Content-Type', meta.type)
+
+    // the user set content-length messes up response
+    res.append('Content-Length', meta.size-1)
+    
+  }
   // get directory adapter
-  const adapter = fileStorage.createAdapter(__dirname + req.path);
+  const adapter = fileStorage.createAdapter(filepath);
 
   const parse = path.parse(req.path);
 
@@ -91,6 +104,7 @@ app.post('/*', (req, res, next) => {
       fileWriteStream.end()
 
       metaStorage.createMetaData(path.join(__dirname, req.path))
+      console.log()
 
       res.end()
 

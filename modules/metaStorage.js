@@ -9,7 +9,7 @@ const metaStorage = {};
 
 metaStorage.createMetaData = function(filepath) {
 
-  console.log(filepath)
+  console.log('creating meta data')
 
   const parsed = path.parse(filepath);
 
@@ -64,7 +64,7 @@ metaStorage.getMetaData = async function(filepath) {
 
   const file = await File.findOne({fullPath: filepath});
 
-  console.log(filepath)
+  console.log('getting meta data')
 
   // TODO error handling
 
