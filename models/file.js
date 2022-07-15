@@ -6,10 +6,10 @@ const FileSchema = new Schema({
 
   name: {type: String, required: true},
   dir: {type: String, required: true},
-  size: {type: BigInt, required: true},
+  size: {type: Number, required: true},
   type: {type: String, required: true},
-  creationDate: {type: Date, required: true},
-  modDate: {type: Date, required: true},
+  cDate: {type: Date, required: true},
+  mDate: {type: Date, required: true},
 
 });
 

@@ -7,6 +7,7 @@ const express = require('express');
 const app = express();
 
 const fileStorage = require('./modules/fileStorage');
+const metaStorage = require('./modules/metaStorage');
 const initializeMongo = require('./mongoConfig');
 
 initializeMongo()
@@ -36,11 +37,15 @@ app.get('/*', (req, res, next) => {
       readStream.pipe(res)
 
     })
+
     .on('err', () => {
       // TODO handle error
     })
+  
     .on('end', () => {
+      
       res.end()
+
     })
 
 });
@@ -68,6 +73,8 @@ app.post('/*', (req, res, next) => {
     .on('end', () => {
 
       fileWriteStream.end()
+
+      metaStorage.createMetaData(path.join(__dirname, req.path))
 
       res.end()
 
