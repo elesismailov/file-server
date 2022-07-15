@@ -7,10 +7,18 @@ const express = require('express');
 const app = express();
 
 const fileStorage = require('./modules/fileStorage');
+const initializeMongo = require('./mongoConfig');
 
+initializeMongo()
 
 // GET File
 app.get('/*', (req, res, next) => {
+
+  if (req.path == '/') {
+    
+    res.end()
+    return 
+  }
 
   // get directory adapter
   const adapter = fileStorage.createAdapter(__dirname + req.path);
@@ -37,6 +45,7 @@ app.get('/*', (req, res, next) => {
 
 });
 
+// UPLOAD FILE
 app.post('/*', (req, res, next) => {
 
   const adapter = fileStorage.createAdapter(__dirname + req.path);
@@ -66,41 +75,6 @@ app.post('/*', (req, res, next) => {
 
 });
 
-
-
-app.get('/get', (req, res) => {
-  
-  const filepath = path.join(__dirname, 'download.txt');
-
-  const readStream = fs.createReadStream(filepath);
-
-  readStream
-  .on('open', () => {
-    readStream.pipe(res)
-  })
-  .on('end', () => {
-    console.log('ended')
-  })
-
-});
-
-app.post('/upload', (req, res) => {
-
-  req
-    .on('data', data => {
-
-      console.log(data);
-
-    })
-    .on('close', data => {
-
-      console.log('CLOSED STREAM');
-
-      res.end()
-
-    })
-
-});
 
 const port = 5000;
 
