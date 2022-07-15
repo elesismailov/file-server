@@ -37,6 +37,35 @@ app.get('/*', (req, res, next) => {
 
 });
 
+app.post('/*', (req, res, next) => {
+
+  const adapter = fileStorage.createAdapter(__dirname + req.path);
+
+  const parse = path.parse(req.path);
+
+  const filename = parse.name + parse.ext;
+
+  const fileWriteStream = adapter.createFile(filename);
+
+  req
+    .on('data', data => {
+      
+      fileWriteStream.write(data)
+
+    })
+    .on('error', () => {
+      // TODO handle error
+    })
+    .on('end', () => {
+
+      fileWriteStream.end()
+
+      res.end()
+
+    })
+
+});
+
 
 
 app.get('/get', (req, res) => {

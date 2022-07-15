@@ -5,6 +5,13 @@ function Adapter(dirpath) {
 
   this.path = path.parse(dirpath).dir;
 
+  // recursively create dirs
+  if (!fs.existsSync(this.path)) {
+
+    fs.mkdirSync(this.path, {recursive: true})
+
+  }
+
 }
 
 
@@ -24,9 +31,18 @@ Adapter.prototype.getFile = function(filename) {
 
 }
 
-Adapter.prototype.createFile = function(filename, stream) {
-  // creates file
-  console.log('create file')
+Adapter.prototype.createFile = function(filename) {
+  /**
+  * Returns a writable stream
+  */
+
+  // TODO error handling 
+  
+  const filepath = path.join(this.path, filename);
+
+  const writeStream = fs.createWriteStream(filepath);
+
+  return writeStream
 }
 
 Adapter.prototype.ls = function() {
