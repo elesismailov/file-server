@@ -10,8 +10,11 @@ const fileStorage = require('./modules/fileStorage');
 const metaStorage = require('./modules/metaStorage');
 const initializeMongo = require('./mongoConfig');
 
+const logger = require('./modules/logger/index');
+
 initializeMongo()
 
+app.use(logger);
 
 app.get('/info/*', async (req, res) => {
 
