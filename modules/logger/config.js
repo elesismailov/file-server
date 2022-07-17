@@ -2,7 +2,7 @@
 const loggerConfig = {
 
 
-  // enable to log sending files to client
+  // enable to log sending files to the client
   send: true,
 
   // enable to log reveiving files from the client
@@ -16,3 +16,5 @@ const loggerConfig = {
   dirSize: 10,
 
 }
+
+module.exports = loggerConfig;
