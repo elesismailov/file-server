@@ -18,16 +18,24 @@ function Adapter(dirpath) {
 Adapter.prototype.getFile = function(filename) {
 
   /**
-  *
-  * Returns file request stream
-  *
+  *     Returns file request stream
   */
 
   const filepath = path.join(this.path, filename);
 
-  const readStream = fs.createReadStream(filepath);
+  try {
 
-  return readStream
+    const readStream = fs.createReadStream(filepath);
+
+    return readStream
+
+  } catch (err) {
+
+    console.log(err)
+
+    return err
+
+  }
 
 }
 

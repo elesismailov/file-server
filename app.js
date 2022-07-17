@@ -42,6 +42,14 @@ app.get('/*', async (req, res) => {
 
   const filepath = path.join(__dirname + req.path);
 
+  if (!fs.existsSync(filepath)) {
+
+    res.sendStatus(404)
+
+    return
+
+  }
+
   const parsed = path.parse(req.path);
 
   const filename = parsed.name + parsed.ext;
@@ -59,13 +67,12 @@ app.get('/*', async (req, res) => {
     
   }
 
-  // TODO handle EONENT error
   // get directory adapter
   const adapter = fileStorage.createAdapter(filepath);
 
   // requested file stream
   const readStream = adapter.getFile(filename);
-
+  
   readStream
     .on('open', () => {
       
@@ -73,8 +80,12 @@ app.get('/*', async (req, res) => {
 
     })
 
-    .on('err', () => {
-      // TODO handle error
+    .on('error', () => {
+      
+      res
+        .sendStatus(404)
+        .end();
+      
     })
   
     .on('end', () => {
