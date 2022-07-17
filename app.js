@@ -34,9 +34,11 @@ app.get('/info/*', async (req, res) => {
 // GET File
 app.get('/*', async (req, res) => {
 
+  // an empty request
   if (req.path == '/') {
     
     res.end()
+
     return 
   }
 
@@ -92,7 +94,7 @@ app.get('/*', async (req, res) => {
       
       res.end()
 
-    })
+    });
 
 });
 
@@ -114,17 +116,20 @@ app.post('/*', (req, res) => {
 
     })
     .on('error', () => {
-      // TODO handle error
+
+      res.status(505)
+
     })
     .on('end', () => {
 
       fileWriteStream.end()
 
-      console.log(req.get('Content-Type'))
-
-      metaStorage.createMetaData(path.join(__dirname, req.path), {
-        type: req.get('Content-Type'),
-      });
+      metaStorage.createMetaData(
+        path.join(__dirname, req.path),
+        {
+          type: req.get('Content-Type')
+        }
+      );
 
       res.end()
 

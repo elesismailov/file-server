@@ -9,8 +9,6 @@ const metaStorage = {};
 
 metaStorage.createMetaData = function(filepath, options) {
 
-  console.log('creating meta data')
-
   const parsed = path.parse(filepath);
 
   const filename = parsed.name + parsed.ext;
@@ -21,7 +19,8 @@ metaStorage.createMetaData = function(filepath, options) {
 
   File.findOne({fullPath: filepath}, (err, resFile) => {
     if (err) {
-      throw err
+      console.log(err)
+      return 
     }
 
     // create new meta data
@@ -41,11 +40,7 @@ metaStorage.createMetaData = function(filepath, options) {
       });
 
       file.save((err) => {
-        if (err) {
-          // console.log(err)
-          throw err
-        }
-        console.log('created meta data')
+        if (err) console.log(err);
       });
 
     } else {
@@ -59,9 +54,8 @@ metaStorage.createMetaData = function(filepath, options) {
 
       }, (err, up) => {
 
-        if (err) throw err
+        if (err) console.log(err);
 
-        console.log('updated')
       })
     }
   });
@@ -70,10 +64,6 @@ metaStorage.createMetaData = function(filepath, options) {
 metaStorage.getMetaData = async function(filepath) {
 
   const file = await File.findOne({fullPath: filepath});
-
-  console.log('getting meta data')
-
-  // TODO error handling
 
   return file
 
