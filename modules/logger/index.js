@@ -23,7 +23,19 @@ function logger(req, res, next) {
       console.log('INFO: Finished sending file. ' + req.path)
 
     })
+  } else if (
+    config.receive === true &&
+    req.method === 'POST' &&
+    req.path[0] === '/'
+  ) {
 
+    console.log('INFO: Started receiving file: ' + req.path)
+
+    req.on('end', () => {
+
+      console.log('INFO: Finished receiving file: ' + req.path)
+
+    })
   }
   
 
