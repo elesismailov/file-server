@@ -1,10 +1,13 @@
+
 const fs = require('fs');
 const path = require('path');
+const chalk = require('chalk');
 
 const getConfig = require('./getConfig');
 
 // ? should you read a config everytime
 const config = getConfig();
+const log = console.log;
 
 
 function logger(req, res, next) {
@@ -24,18 +27,11 @@ function logger(req, res, next) {
   ) {
 
     // TODO color the output
-    console.info('INFO: Started sending file. ' + req.path)
+    log(chalk.blue('Started sending file. ') + req.path)
 
-    req.on('end', async () => {
+    req.on('end', () => {
 
-      console.log('INFO: Finished sending file. ' + req.path)
-
-      const filesCount = await getFilesCount(config.dirname + dirpath)
-
-      if (filesCount > config.fileNumberExeed) {
-
-        console.warn('WARN: The number of files has exeeded ' + config.fileNumberExeed)
-      }
+      log(chalk.blue('Finished sending file. ') + req.path)
 
     })
 
@@ -45,11 +41,18 @@ function logger(req, res, next) {
     req.path[0] === '/'
   ) {
 
-    console.log('INFO: Started receiving file: ' + req.path)
+    log(chalk.blue('Started receiving file: ') + req.path)
 
-    req.on('end', () => {
+    req.on('end', async () => {
 
-      console.log('INFO: Finished receiving file: ' + req.path)
+      log(chalk.blue('Finished receiving file: ') + req.path)
+
+      const filesCount = await getFilesCount(config.dirname + dirpath)
+
+      if (filesCount > config.fileNumberExeed) {
+
+        log(chalk.orange('The number of files has exeeded ') + config.fileNumberExeed)
+      }
 
     })
   }
@@ -58,8 +61,6 @@ function logger(req, res, next) {
 async function getFilesCount(dirpath) {
 
   const files = await fs.promises.readdir(dirpath);
-
-  console.log(files)
 
   return files.length
 }

@@ -4,6 +4,7 @@ const path = require('path');
 
 const loggerConfig = {
 
+  // get the dirname of this file itself
   dirname: __dirname,
 
   // enable to log sending files to the client
