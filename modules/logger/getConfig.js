@@ -1,5 +1,5 @@
 
-const loggerConfig = require('./config');
+const loggerConfig = require('../../config');
 
 function getConfig() {
 

@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 
 const getConfig = require('./getConfig');
 
@@ -9,6 +11,12 @@ function logger(req, res, next) {
 
   next();
 
+  const parsed = path.parse(req.path);
+
+  const dirpath = parsed.dir;
+
+  const filename = parsed.name + parsed.ext;
+
   if (
     config.send === true &&
     req.method === 'GET' &&
@@ -18,11 +26,19 @@ function logger(req, res, next) {
     // TODO color the output
     console.info('INFO: Started sending file. ' + req.path)
 
-    req.on('end', () => {
+    req.on('end', async () => {
 
       console.log('INFO: Finished sending file. ' + req.path)
 
+      const filesCount = await getFilesCount(config.dirname + dirpath)
+
+      if (filesCount > config.fileNumberExeed) {
+
+        console.warn('WARN: The number of files has exeeded ' + config.fileNumberExeed)
+      }
+
     })
+
   } else if (
     config.receive === true &&
     req.method === 'POST' &&
@@ -37,22 +53,15 @@ function logger(req, res, next) {
 
     })
   }
-  
+}
 
-  /* TODO
+async function getFilesCount(dirpath) {
 
-    - info: if number of files exceeds <settings.fileExeed>
+  const files = await fs.promises.readdir(dirpath);
 
-    - log: started sending file if <settings.upload>
-    - log: finished sending file if <settings.upload>
+  console.log(files)
 
-    - log: started recieving file if <settings.download>
-    - log: finished recieving file if <settings.download>
-
-    - warn: size of files in <certain> dir exeeded if <settings.size> != null
-
-  */
-
+  return files.length
 }
 
 

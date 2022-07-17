@@ -42,6 +42,10 @@ app.get('/*', async (req, res) => {
 
   const filepath = path.join(__dirname + req.path);
 
+  const parsed = path.parse(req.path);
+
+  const filename = parsed.name + parsed.ext;
+
   // TODO handle null meta data
   const meta = await metaStorage.getMetaData(filepath);
 
@@ -54,12 +58,10 @@ app.get('/*', async (req, res) => {
     meta.size ? res.append('Content-Length', meta.size-1): 0;
     
   }
+
+  // TODO handle EONENT error
   // get directory adapter
   const adapter = fileStorage.createAdapter(filepath);
-
-  const parse = path.parse(req.path);
-
-  const filename = parse.name + parse.ext;
 
   // requested file stream
   const readStream = adapter.getFile(filename);
@@ -84,7 +86,7 @@ app.get('/*', async (req, res) => {
 });
 
 // UPLOAD FILE
-app.post('/*', (req, res, next) => {
+app.post('/*', (req, res) => {
 
   const adapter = fileStorage.createAdapter(__dirname + req.path);
 
