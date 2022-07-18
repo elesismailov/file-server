@@ -32,7 +32,6 @@ async function getHandler(req, res) {
 
   const filename = parsed.name + parsed.ext;
 
-  // TODO handle null meta data
   const meta = await metaStorage.getMetaData(filepath);
 
   if (meta) {

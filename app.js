@@ -8,8 +8,6 @@ const app = express();
 
 const fileStorage = require('./modules/fileStorage');
 const metaStorage = require('./modules/metaStorage');
-// TODO try catch no internet connection
-// const initializeMongo = require('./mongoConfig');
 
 const logger = require('./modules/logger/index');
 
@@ -17,11 +15,18 @@ const infoHandler = require('./routes/info');
 const getHandler = require('./routes/get');
 const postHandler = require('./routes/info');
 
+// mongo connection
 try {
+
+  const initializeMongo = require('./mongoConfig');
 
   initializeMongo()
 
 } catch (err) {
+
+  const initializeMongo = require('./mongoConfig');
+
+  initializeMongo()
 
   console.log('No internet connection.')
 

@@ -20,6 +20,7 @@ function postHandler(req, res) {
     .on('data', data => {
       
       fileWriteStream.write(data)
+      // req.pipe(fileWriteStream)
 
     })
     .on('error', () => {
