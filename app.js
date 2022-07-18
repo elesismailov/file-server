@@ -13,7 +13,7 @@ const logger = require('./modules/logger/index');
 
 const infoHandler = require('./routes/info');
 const getHandler = require('./routes/get');
-const postHandler = require('./routes/info');
+const postHandler = require('./routes/post');
 
 // mongo connection
 try {

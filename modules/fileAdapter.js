@@ -48,6 +48,8 @@ Adapter.prototype.createFile = function(filename) {
   
   const filepath = path.join(this.path, filename);
 
+  console.log(filepath)
+
   const writeStream = fs.createWriteStream(filepath);
 
   return writeStream

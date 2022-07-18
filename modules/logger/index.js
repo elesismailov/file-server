@@ -50,7 +50,8 @@ function logger(req, res, next) {
 
       if (filesCount > config.fileNumberExeed) {
 
-        log(chalk.orange('The number of files has exeeded ') + config.fileNumberExeed)
+        // log(chalk.orange('The number of files has exeeded ') + config.fileNumberExeed)
+        log('File has exeeded')
       }
 
     })

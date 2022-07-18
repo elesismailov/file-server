@@ -10,6 +10,8 @@ function postHandler(req, res) {
 
   const adapter = fileStorage.createAdapter(config.dirname + req.path);
 
+  console.log(config.dirname + req.path)
+
   const parse = path.parse(req.path);
 
   const filename = parse.name + parse.ext;
@@ -33,7 +35,7 @@ function postHandler(req, res) {
       fileWriteStream.end()
 
       metaStorage.createMetaData(
-        path.join(__dirname, req.path),
+        path.join(config.dirname, req.path),
         {
           type: req.get('Content-Type')
         }

@@ -69,5 +69,13 @@ metaStorage.getMetaData = async function(filepath) {
 
 }
 
+metaStorage.deleteMetaData = async function(filepath) {
+  
+  const count = await File.findOneAndDelete({fullpath: filepath});
+
+  return count
+
+}
+
 
 module.exports = metaStorage;
