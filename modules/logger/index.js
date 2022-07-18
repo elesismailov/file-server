@@ -26,7 +26,6 @@ function logger(req, res, next) {
     req.path[0] === '/' 
   ) {
 
-    // TODO color the output
     log(chalk.blue('Started sending file. ') + req.path)
 
     req.on('end', () => {

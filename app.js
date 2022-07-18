@@ -12,7 +12,15 @@ const initializeMongo = require('./mongoConfig');
 
 const logger = require('./modules/logger/index');
 
-initializeMongo()
+try {
+
+  initializeMongo()
+
+} catch {
+
+  console.log('No internet connection.')
+
+}
 
 app.use(logger);
 
